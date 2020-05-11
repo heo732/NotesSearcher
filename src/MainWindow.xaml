@@ -45,6 +45,8 @@
                 </Style>
                 <Style x:Key="AlternatingListViewItemStyle_2" TargetType="{x:Type ListViewItem}">
                     <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter Property="Background" Value="OrangeRed"/>
@@ -71,7 +73,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="{Binding Question}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="0" Text="{Binding Question, Mode=OneWay}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
                             <ListView Grid.Column="1" ItemsSource="{Binding Answers, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle_2}" Margin="10" Background="Transparent" BorderThickness="0">
                                 <ListView.Template>
                                     <ControlTemplate>
