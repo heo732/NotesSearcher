@@ -7,6 +7,7 @@ using System.Windows;
 using Newtonsoft.Json;
 
 using QAHelper.Models;
+using QAHelper.Views;
 using QAHelper.WPF;
 
 namespace QAHelper.ViewModels
@@ -18,6 +19,7 @@ namespace QAHelper.ViewModels
         public MainViewModel()
         {
             LoadQAItemsFromJsonFile("Sample.json");
+            AboutCommand = new DelegateCommand(AboutAction);
         }
 
         public int QuestionsNumber => QAItems.Count;
@@ -33,6 +35,8 @@ namespace QAHelper.ViewModels
             }
         }
 
+        public DelegateCommand AboutCommand { get; }
+
         private void LoadQAItemsFromJsonFile(string filePath)
         {
             try
@@ -43,6 +47,11 @@ namespace QAHelper.ViewModels
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void AboutAction()
+        {
+            new AboutWindow(new AboutViewModel()).ShowDialog();
         }
     }
 }

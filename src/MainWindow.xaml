@@ -25,7 +25,14 @@
         </Grid.ColumnDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            
+            <MenuItem Header="File">
+                <MenuItem Header="Load QA items from JSON" Command="{Binding LoadQAItemsFromJsonCommand}"/>
+                <MenuItem Header="Load QA items from images" Command="{Binding LoadQAItemsFromImagesCommand}"/>
+                <MenuItem Header="Append QA items from JSON" Command="{Binding AppendQAItemsFromJsonCommand}"/>
+                <MenuItem Header="Append QA items from images" Command="{Binding AppendQAItemsFromImagesCommand}"/>
+                <MenuItem Header="Save QA items into JSON" Command="{Binding LoadQAItemsFromImagesCommand}"/>
+            </MenuItem>
+            <MenuItem Header="About" Command="{Binding AboutCommand}"/>
         </Menu>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding QuestionsNumber, Mode=OneWay, StringFormat={}Questions ({0})}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Answers" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
@@ -47,10 +54,10 @@
                     <Setter Property="BorderThickness" Value="0"/>
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="OrangeRed"/>
+                            <Setter Property="Background" Value="LightGoldenrodYellow"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="LawnGreen"/>
+                            <Setter Property="Background" Value="LightSeaGreen"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
