@@ -1,22 +1,33 @@
 [
   {
-    "Q": "Question_1 ?",
-    "A": "Answer for question_1 !"
+    "Question": "Question_1 ?",
+    "Answers": [
+      "Answer for question_1 !"
+    ]
   },
   {
-    "Q": "Question_2 ?",
-    "A": "Answer for question_2 !"
+    "Question": "Question_2 ?",
+    "Answers": [
+      "Answer for question_2 !"
+    ]
   },
   {
-    "Q": "Question_3 ?",
-    "A": "Answer for question_3 !"
+    "Question": "Question_3 ?",
+    "Answers": [
+      "Answer for question_3 !"
+    ]
   },
   {
-    "Q": "Question_4 ?",
-    "A": "Answer for question_4 !"
+    "Question": "Question_4 ?",
+    "Answers": [
+      "Answer for question_4 !"
+    ]
   },
   {
-    "Q": "Question_5 ?",
-    "A": "Answer_1 for question_5 !===Answer_2 for question_5 !asdfasdfasdfsdfasdfasdfasdfasdfasdfasdfsdafsdssssssssssssssssssssssssssssssssssssssss"
+    "Question": "Question_5 ?",
+    "Answers": [
+      "Answer_1 for question_5 !",
+      "Answer_2 for question_5 !"
+    ]
   }
 ]

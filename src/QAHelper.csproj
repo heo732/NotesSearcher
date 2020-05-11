@@ -59,7 +59,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\QAItem.cs" />
-    <Compile Include="ViewModels\QAItemViewModel.cs" />
     <Compile Include="WPF\BindableBase.cs" />
     <Compile Include="WPF\DelegateCommand.cs" />
     <Page Include="MainWindow.xaml">

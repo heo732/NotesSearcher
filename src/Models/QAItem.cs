@@ -1,13 +1,9 @@
-﻿using Newtonsoft.Json;
-
-namespace QAHelper.Models
+﻿namespace QAHelper.Models
 {
     public class QAItem
     {
-        [JsonProperty("Q")]
-        public string Question { get; set; }
+        public string Question { get; set; } = string.Empty;
 
-        [JsonProperty("A")]
-        public string Answer { get; set; }
+        public string[] Answers { get; set; } = new string[0];
     }
 }
