@@ -18,7 +18,6 @@ namespace QAHelper.ViewModels
         public MainViewModel()
         {
             LoadQAItemsFromJsonFile("Sample.json");
-            ChangeMultiAnswerDelimeterCommand = new DelegateCommand(ChangeMultiAnswerDelimeterAction);
         }
 
         public int QuestionsNumber => QAItems.Count;
@@ -34,8 +33,6 @@ namespace QAHelper.ViewModels
             }
         }
 
-        public DelegateCommand ChangeMultiAnswerDelimeterCommand { get; }
-
         private void LoadQAItemsFromJsonFile(string filePath)
         {
             try
@@ -46,11 +43,6 @@ namespace QAHelper.ViewModels
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void ChangeMultiAnswerDelimeterAction()
-        {
-
         }
     }
 }
