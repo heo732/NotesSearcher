@@ -17,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -29,28 +29,42 @@
         </Menu>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding QuestionsNumber, Mode=OneWay, StringFormat={}Questions ({0})}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Answers" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
-        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding QAItems, Mode=OneWay}">
-            <ListView.Template>
-                <ControlTemplate>
-                    <ItemsPresenter/>
-                </ControlTemplate>
-            </ListView.Template>
+        <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ScrollViewer.Resources>
+                <Style x:Key="AlternatingListViewItemStyle" TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </Trigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ScrollViewer.Resources>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+            <ListView ItemsSource="{Binding QAItems, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle}">
+                <ListView.Template>
+                    <ControlTemplate>
+                        <ItemsPresenter/>
+                    </ControlTemplate>
+                </ListView.Template>
 
-                        <TextBlock Grid.Column="0" Text="{Binding Question}" TextWrapping="Wrap"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Answer}" TextWrapping="Wrap"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
 
+                            <TextBlock Grid.Column="0" Text="{Binding Question}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Answer}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
     </Grid>
     
 </Window>
