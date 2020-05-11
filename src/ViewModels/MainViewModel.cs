@@ -8,29 +8,33 @@ using Newtonsoft.Json;
 
 using QAHelper.WPF;
 
-namespace QAHelper
+namespace QAHelper.ViewModels
 {
     public class MainViewModel : BindableBase
     {
-        private ObservableCollection<QAItem> qaItems = new ObservableCollection<QAItem>();
+        private ObservableCollection<QAItem> _qaItems = new ObservableCollection<QAItem>();
+        private string multiAnswerDelimeter = "===";
 
         public MainViewModel()
         {
             LoadQAItemsFromJsonFile("Sample.json");
+            ChangeMultiAnswerDelimeterCommand = new DelegateCommand(ChangeMultiAnswerDelimeterAction);
         }
 
         public int QuestionsNumber => QAItems.Count;
 
         public ObservableCollection<QAItem> QAItems
         {
-            get => qaItems;
+            get => _qaItems;
             set
             {
-                qaItems = value;
+                _qaItems = value;
                 RaisePropertyChanged(nameof(QAItems));
                 RaisePropertyChanged(nameof(QuestionsNumber));
             }
         }
+
+        public DelegateCommand ChangeMultiAnswerDelimeterCommand { get; }
 
         private void LoadQAItemsFromJsonFile(string filePath)
         {
@@ -42,6 +46,11 @@ namespace QAHelper
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ChangeMultiAnswerDelimeterAction()
+        {
+
         }
     }
 }

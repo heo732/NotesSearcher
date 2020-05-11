@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using QAHelper.ViewModels;
+
 namespace QAHelper
 {
     public partial class MainWindow : Window

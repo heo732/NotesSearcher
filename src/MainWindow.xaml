@@ -15,7 +15,7 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -25,7 +25,9 @@
         </Grid.ColumnDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            
+            <MenuItem Header="Settings">
+                <MenuItem Header="Change multi answer delimeter" Command="{Binding ChangeMultiAnswerDelimeterCommand}"/>
+            </MenuItem>
         </Menu>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding QuestionsNumber, Mode=OneWay, StringFormat={}Questions ({0})}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Answers" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
