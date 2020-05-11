@@ -33,7 +33,7 @@
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Answers" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
         <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ScrollViewer.Resources>
-                <Style x:Key="AlternatingListViewItemStyle" TargetType="{x:Type ListViewItem}">
+                <Style x:Key="AlternatingListViewItemStyle_1" TargetType="{x:Type ListViewItem}">
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter Property="Background" Value="LightGray"/>
@@ -43,9 +43,20 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
+                <Style x:Key="AlternatingListViewItemStyle_2" TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Focusable" Value="False"/>
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="OrangeRed"/>
+                        </Trigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="LawnGreen"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </ScrollViewer.Resources>
 
-            <ListView ItemsSource="{Binding QAItems, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle}">
+            <ListView ItemsSource="{Binding QAItems, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle_1}">
                 <ListView.Template>
                     <ControlTemplate>
                         <ItemsPresenter/>
@@ -61,7 +72,19 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding Question}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Answers[0]}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
+                            <ListView Grid.Column="1" ItemsSource="{Binding Answers, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle_2}" Margin="10" Background="Transparent" BorderThickness="0">
+                                <ListView.Template>
+                                    <ControlTemplate>
+                                        <ItemsPresenter/>
+                                    </ControlTemplate>
+                                </ListView.Template>
+
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBox Background="Transparent" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="True" VerticalAlignment="Center" Text="{Binding Mode=OneWay}" TextWrapping="Wrap"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
