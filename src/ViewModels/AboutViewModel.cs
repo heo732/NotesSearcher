@@ -28,7 +28,7 @@ namespace QAHelper.ViewModels
 
         private void SupportAction()
         {
-            Process.Start(new Uri("mailto:" + SupportEmail + "?subject=QA Helper " + ToolVersion + " Support: <Please, specify the issue subject>&body=<Please, specify the issue description>").AbsoluteUri);
+            Process.Start(new Uri("mailto:" + SupportEmail + "?subject=QA Helper " + ToolVersion + " Support: <Please, specify subject of the issue>&body=<Please, specify description of the issue>").AbsoluteUri);
         }
     }
 }
