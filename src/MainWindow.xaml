@@ -61,7 +61,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding Question}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Answer}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Answers[0]}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 using Newtonsoft.Json;
 
+using QAHelper.Models;
 using QAHelper.WPF;
 
 namespace QAHelper.ViewModels
 {
     public class MainViewModel : BindableBase
     {
-        private ObservableCollection<QAItem> _qaItems = new ObservableCollection<QAItem>();
-        private string multiAnswerDelimeter = "===";
+        private ObservableCollection<QAItemViewModel> _qaItems = new ObservableCollection<QAItemViewModel>();
+        private string _multiAnswerDelimeter = "===";
 
         public MainViewModel()
         {
@@ -23,7 +25,7 @@ namespace QAHelper.ViewModels
 
         public int QuestionsNumber => QAItems.Count;
 
-        public ObservableCollection<QAItem> QAItems
+        public ObservableCollection<QAItemViewModel> QAItems
         {
             get => _qaItems;
             set
@@ -40,7 +42,7 @@ namespace QAHelper.ViewModels
         {
             try
             {
-                QAItems = new ObservableCollection<QAItem>(JsonConvert.DeserializeObject<IEnumerable<QAItem>>(File.ReadAllText(filePath)));
+                QAItems = new ObservableCollection<QAItemViewModel>(JsonConvert.DeserializeObject<IEnumerable<QAItem>>(File.ReadAllText(filePath)).Select(i => new QAItemViewModel(i, _multiAnswerDelimeter)));
             }
             catch (Exception ex)
             {
