@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:QAHelper"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
-        MinWidth="500" MinHeight="500"
+        MinWidth="300" MinHeight="250"
         Title="QA Helper" Height="450" Width="800">
 
     <Window.Icon>
