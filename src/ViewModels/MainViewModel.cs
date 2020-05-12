@@ -40,7 +40,7 @@ namespace QAHelper.ViewModels
         public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
         {
             List<QAItem> filteredItems = new List<QAItem>();
-            var punctuation = new string[] { ".", ",", "!", "?", ":", ";", "-" };
+            var punctuation = new string[] { ".", ",", "!", "?", ":", ";", "-", "(", ")" };
 
             foreach (QAItem item in QAItems)
             {
