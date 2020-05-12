@@ -41,6 +41,14 @@
                     <!--<MenuItem Header="TXT" Command="{Binding SaveQAItemsIntoTxtCommand}"/>-->
                 </MenuItem>
             </MenuItem>
+            <!--<MenuItem Header="Settings">
+                <MenuItem Header="Image recognition language" Command="{Binding ChangeImageRecognitionLanguageCommand}"/>
+                <MenuItem Header="Program language" Command="{Binding ChangeProgramLanguageCommand}"/>
+                <MenuItem Header="Theme">
+                    <MenuItem Header="Light" Command="{Binding SetLightThemeCommand}"/>
+                    <MenuItem Header="Dark" Command="{Binding SetDarkThemeCommand}"/>
+                </MenuItem>
+            </MenuItem>-->
             <MenuItem Header="About" Command="{Binding AboutCommand}"/>
         </Menu>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding QuestionsNumber, Mode=OneWay, StringFormat={}Questions ({0})}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
