@@ -57,68 +57,76 @@ namespace QAHelper.ViewModels
                 }
 
                 // Search in Questions.
-                string qStr = item.Question;
-                foreach (string s in _settingsModel.Punctuation)
-                {
-                    qStr = qStr.Replace(s, " ");
-                }
-                List<string> questionWords = qStr
-                    .Split(' ')
-                    .Where(i => !string.IsNullOrWhiteSpace(i))
-                    .ToList();
-
-                while (searchWords.Any() && questionWords.Any())
-                {
-                    string sw = searchWords.First();
-                    int index = questionWords.IndexOf(questionWords.Where(qw => qw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
-                    if (index >= 0)
-                    {
-                        questionWords = new List<string>(questionWords.Skip(index + 1));
-                        searchWords = searchWords.Skip(1);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
                 bool passQuestion = false;
-                if (!searchWords.Any())
+
+                if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Questions || _settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both)
                 {
-                    passQuestion = true;
+                    string qStr = item.Question;
+                    foreach (string s in _settingsModel.Punctuation)
+                    {
+                        qStr = qStr.Replace(s, " ");
+                    }
+                    List<string> questionWords = qStr
+                        .Split(' ')
+                        .Where(i => !string.IsNullOrWhiteSpace(i))
+                        .ToList();
+
+                    while (searchWords.Any() && questionWords.Any())
+                    {
+                        string sw = searchWords.First();
+                        int index = questionWords.IndexOf(questionWords.Where(qw => qw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
+                        if (index >= 0)
+                        {
+                            questionWords = new List<string>(questionWords.Skip(index + 1));
+                            searchWords = searchWords.Skip(1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (!searchWords.Any())
+                    {
+                        passQuestion = true;
+                    }
                 }
 
                 // Search in Answers.
-                searchWords = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
-                string aStr = string.Join(" ", item.Answers);
-                foreach (string s in _settingsModel.Punctuation)
-                {
-                    aStr = aStr.Replace(s, " ");
-                }
-                List<string> answerWords = aStr
-                    .Split(' ')
-                    .Where(i => !string.IsNullOrWhiteSpace(i))
-                    .ToList();
-
-                while (searchWords.Any() && answerWords.Any())
-                {
-                    string sw = searchWords.First();
-                    int index = answerWords.IndexOf(answerWords.Where(aw => aw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
-                    if (index >= 0)
-                    {
-                        answerWords = new List<string>(answerWords.Skip(index + 1));
-                        searchWords = searchWords.Skip(1);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
                 bool passAnswer = false;
-                if (!searchWords.Any())
+
+                if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Answers || (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both && !passQuestion))
                 {
-                    passAnswer = true;
+                    searchWords = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+                    string aStr = string.Join(" ", item.Answers);
+                    foreach (string s in _settingsModel.Punctuation)
+                    {
+                        aStr = aStr.Replace(s, " ");
+                    }
+                    List<string> answerWords = aStr
+                        .Split(' ')
+                        .Where(i => !string.IsNullOrWhiteSpace(i))
+                        .ToList();
+
+                    while (searchWords.Any() && answerWords.Any())
+                    {
+                        string sw = searchWords.First();
+                        int index = answerWords.IndexOf(answerWords.Where(aw => aw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
+                        if (index >= 0)
+                        {
+                            answerWords = new List<string>(answerWords.Skip(index + 1));
+                            searchWords = searchWords.Skip(1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (!searchWords.Any())
+                    {
+                        passAnswer = true;
+                    }
                 }
 
                 switch (_settingsModel.KeyWordsSearchType)
