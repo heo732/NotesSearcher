@@ -38,10 +38,16 @@ namespace QAHelper.ViewModels
         public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
         {
             List<QAItem> filteredItems = new List<QAItem>();
+            var punctuation = new string[] { ".", ",", "!", "?", ":", ";", "-" };
 
             foreach (QAItem item in QAItems)
             {
-                IEnumerable<string> searchWords = QuestionSearchWordsString.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+                string searchWordsStr = QuestionSearchWordsString;
+                foreach (string s in punctuation)
+                {
+                    searchWordsStr = searchWordsStr.Replace(s, " ");
+                }
+                IEnumerable<string>  searchWords = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
 
                 if (!searchWords.Any())
                 {
@@ -49,7 +55,16 @@ namespace QAHelper.ViewModels
                     continue;
                 }
 
-                List<string> questionWords = item.Question.Split(' ').ToList();
+                string qStr = item.Question;
+                foreach (string s in punctuation)
+                {
+                    qStr = qStr.Replace(s, " ");
+                }
+                List<string> questionWords = qStr
+                    .Split(' ')
+                    .Where(i => !string.IsNullOrWhiteSpace(i))
+                    .ToList();
+
                 while (searchWords.Any() && questionWords.Any())
                 {
                     string sw = searchWords.First();

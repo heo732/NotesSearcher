@@ -123,8 +123,8 @@
 
             <TextBlock Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Margin="10" Text="Search words:">
                 <TextBlock.ToolTip>
-                    Look up for question with specified words,
-                    in specified order and separated with spacebar.
+                    Look up for question with specified words, 
+                    in specified order and separated with spacebar or punctuation.
                 </TextBlock.ToolTip>
             </TextBlock>
             <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="10" Text="{Binding QuestionSearchWordsString, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
