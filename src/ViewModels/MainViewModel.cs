@@ -20,6 +20,7 @@ namespace QAHelper.ViewModels
     public class MainViewModel : BindableBase
     {
         private ObservableCollection<QAItem> _qaItems = new ObservableCollection<QAItem>();
+        private string _questionSearchWordsString = string.Empty;
 
         public MainViewModel()
         {
@@ -34,6 +35,45 @@ namespace QAHelper.ViewModels
 
         public int QuestionsNumber => QAItems.Count;
 
+        public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
+        {
+            List<QAItem> filteredItems = new List<QAItem>();
+
+            foreach (QAItem item in QAItems)
+            {
+                IEnumerable<string> searchWords = QuestionSearchWordsString.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+
+                if (!searchWords.Any())
+                {
+                    filteredItems.Add(item);
+                    continue;
+                }
+
+                List<string> questionWords = item.Question.Split(' ').ToList();
+                while (searchWords.Any() && questionWords.Any())
+                {
+                    string sw = searchWords.First();
+                    int index = questionWords.IndexOf(sw);
+                    if (index >= 0)
+                    {
+                        questionWords = new List<string>(questionWords.Skip(index + 1));
+                        searchWords = searchWords.Skip(1);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (!searchWords.Any())
+                {
+                    filteredItems.Add(item);
+                }
+            }
+
+            return filteredItems;
+        }, new List<QAItem>());
+
         public ObservableCollection<QAItem> QAItems
         {
             get => _qaItems;
@@ -41,7 +81,19 @@ namespace QAHelper.ViewModels
             {
                 _qaItems = value;
                 RaisePropertyChanged(nameof(QAItems));
+                RaisePropertyChanged(nameof(QAItemsFiltered));
                 RaisePropertyChanged(nameof(QuestionsNumber));
+            }
+        }
+
+        public string QuestionSearchWordsString
+        {
+            get => _questionSearchWordsString;
+            set
+            {
+                _questionSearchWordsString = value;
+                RaisePropertyChanged(nameof(QuestionSearchWordsString));
+                RaisePropertyChanged(nameof(QAItemsFiltered));
             }
         }
 
@@ -66,6 +118,19 @@ namespace QAHelper.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private T TryCatchWrapperMethod<T>(Func<T> func, T defaultReturn)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return defaultReturn;
             }
         }
 
@@ -164,8 +229,7 @@ namespace QAHelper.ViewModels
 
                         foreach (string qPath in qPaths)
                         {
-                            QAItem qaItem = null;
-                            if (!qPath_to_qaItem.TryGetValue(qPath, out qaItem))
+                            if (!qPath_to_qaItem.TryGetValue(qPath, out QAItem qaItem))
                             {
                                 qaItem = new QAItem
                                 {

@@ -18,6 +18,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -80,7 +81,7 @@
                 </Style>
             </ScrollViewer.Resources>
 
-            <ListView ItemsSource="{Binding QAItems, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle_1}">
+            <ListView ItemsSource="{Binding QAItemsFiltered, Mode=OneWay}" HorizontalContentAlignment="Stretch" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle_1}">
                 <ListView.Template>
                     <ControlTemplate>
                         <ItemsPresenter/>
@@ -114,6 +115,20 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollViewer>
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Margin="10" Text="Search words:">
+                <TextBlock.ToolTip>
+                    Look up for question with specified words,
+                    in specified order and separated with spacebar.
+                </TextBlock.ToolTip>
+            </TextBlock>
+            <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="10" Text="{Binding QuestionSearchWordsString, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
     </Grid>
     
 </Window>
