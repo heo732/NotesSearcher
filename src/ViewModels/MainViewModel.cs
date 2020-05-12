@@ -41,21 +41,21 @@ namespace QAHelper.ViewModels
         {
             List<QAItem> filteredItems = new List<QAItem>();
 
+            // Prepare search words.
+            string searchWordsStr = QuestionSearchWordsString;
+            foreach (string s in _settingsModel.Punctuation)
+            {
+                searchWordsStr = searchWordsStr.Replace(s, " ");
+            }
+            IEnumerable<string> searchWords_origin = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+
+            if (!searchWords_origin.Any())
+            {
+                return QAItems.ToList();
+            }
+
             foreach (QAItem item in QAItems)
             {
-                string searchWordsStr = QuestionSearchWordsString;
-                foreach (string s in _settingsModel.Punctuation)
-                {
-                    searchWordsStr = searchWordsStr.Replace(s, " ");
-                }
-                IEnumerable<string>  searchWords = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
-
-                if (!searchWords.Any())
-                {
-                    filteredItems.Add(item);
-                    continue;
-                }
-
                 // Search in Questions.
                 bool passQuestion = false;
 
@@ -70,6 +70,8 @@ namespace QAHelper.ViewModels
                         .Split(' ')
                         .Where(i => !string.IsNullOrWhiteSpace(i))
                         .ToList();
+
+                    IEnumerable<string> searchWords = searchWords_origin;
 
                     while (searchWords.Any() && questionWords.Any())
                     {
@@ -97,7 +99,6 @@ namespace QAHelper.ViewModels
 
                 if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Answers || (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both && !passQuestion))
                 {
-                    searchWords = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
                     string aStr = string.Join(" ", item.Answers);
                     foreach (string s in _settingsModel.Punctuation)
                     {
@@ -107,6 +108,8 @@ namespace QAHelper.ViewModels
                         .Split(' ')
                         .Where(i => !string.IsNullOrWhiteSpace(i))
                         .ToList();
+
+                    IEnumerable<string> searchWords = searchWords_origin;
 
                     while (searchWords.Any() && answerWords.Any())
                     {
