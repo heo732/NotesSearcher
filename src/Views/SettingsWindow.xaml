@@ -1,0 +1,27 @@
+﻿<Window x:Class="QAHelper.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QAHelper.Views"
+        xmlns:WPF="clr-namespace:QAHelper.WPF"
+        xmlns:Enums="clr-namespace:QAHelper.Enums"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="Settings" Height="100" Width="200">
+
+    <Window.Icon>
+        <BitmapImage UriSource="pack://application:,,,/QAHelper;component/Images/question.png"/>
+    </Window.Icon>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Image recognition language" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="1" DisplayMemberPath="DisplayName" ItemsSource="{WPF:EnumToItemsSource {x:Type Enums:RecognitionLanguage}}" SelectedValue="{Binding SelectedRecognitionLanguage}" SelectedValuePath="Value" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+
+</Window>

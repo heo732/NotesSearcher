@@ -21,6 +21,7 @@ namespace QAHelper.ViewModels
     {
         private ObservableCollection<QAItem> _qaItems = new ObservableCollection<QAItem>();
         private string _questionSearchWordsString = string.Empty;
+        private readonly SettingsModel _settingsModel = new SettingsModel();
 
         public MainViewModel()
         {
@@ -31,6 +32,7 @@ namespace QAHelper.ViewModels
             AppendQAItemsFromJsonCommand = new DelegateCommand(() => LoadOrAppendQAItemsFromJson(true));
             LoadQAItemsFromImagesCommand = new DelegateCommand(() => LoadOrAppendQAItemsFromImages(false));
             AppendQAItemsFromImagesCommand = new DelegateCommand(() => LoadOrAppendQAItemsFromImages(true));
+            SettingsCommand = new DelegateCommand(SettingsAction);
         }
 
         public int QuestionsNumber => QAItems.Count;
@@ -123,6 +125,8 @@ namespace QAHelper.ViewModels
         public DelegateCommand LoadQAItemsFromImagesCommand { get; }
 
         public DelegateCommand AppendQAItemsFromImagesCommand { get; }
+
+        public DelegateCommand SettingsCommand { get; }
 
         private void TryCatchWrapperMethod(Action action)
         {
@@ -244,7 +248,15 @@ namespace QAHelper.ViewModels
                     var qPath_to_qaItem = new Dictionary<string, QAItem>();
                     using (OcrApi translator = OcrApi.Create())
                     {
-                        translator.Init(Languages.English);
+                        switch (_settingsModel.ImageRecognitionLanguage)
+                        {
+                            case Enums.RecognitionLanguage.EN:
+                                translator.Init(Languages.English);
+                                break;
+                            case Enums.RecognitionLanguage.UA:
+                                translator.Init(Languages.Ukrainian);
+                                break;
+                        }
 
                         foreach (string qPath in qPaths)
                         {
@@ -273,6 +285,11 @@ namespace QAHelper.ViewModels
                     GroupAndAssignQAItems(qPath_to_qaItem.Values, append);
                 }
             });
+        }
+
+        private void SettingsAction()
+        {
+            new SettingsWindow(new SettingsViewModel(_settingsModel)).ShowDialog();
         }
     }
 }
