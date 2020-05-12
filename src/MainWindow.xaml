@@ -26,11 +26,18 @@
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <MenuItem Header="File">
-                <MenuItem Header="Load QA items from JSON" Command="{Binding LoadQAItemsFromJsonCommand}"/>
-                <MenuItem Header="Load QA items from images" Command="{Binding LoadQAItemsFromImagesCommand}"/>
-                <MenuItem Header="Append QA items from JSON" Command="{Binding AppendQAItemsFromJsonCommand}"/>
-                <MenuItem Header="Append QA items from images" Command="{Binding AppendQAItemsFromImagesCommand}"/>
-                <MenuItem Header="Save QA items into JSON" Command="{Binding SaveQAItemsIntoJsonCommand}"/>
+                <MenuItem Header="Load from">
+                    <MenuItem Header="JSON" Command="{Binding LoadQAItemsFromJsonCommand}"/>
+                    <!--<MenuItem Header="Images" Command="{Binding LoadQAItemsFromImagesCommand}"/>-->
+                </MenuItem>
+                <MenuItem Header="Append from">
+                    <MenuItem Header="JSON" Command="{Binding AppendQAItemsFromJsonCommand}"/>
+                    <!--<MenuItem Header="Images" Command="{Binding AppendQAItemsFromImagesCommand}"/>-->
+                </MenuItem>
+                <MenuItem Header="Save as">
+                    <MenuItem Header="JSON" Command="{Binding SaveQAItemsIntoJsonCommand}"/>
+                    <!--<MenuItem Header="PDF" Command="{Binding SaveQAItemsIntoPdfCommand}"/>-->
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="About" Command="{Binding AboutCommand}"/>
         </Menu>
