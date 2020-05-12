@@ -160,7 +160,7 @@ namespace QAHelper.ViewModels
                     var qPath_to_qaItem = new Dictionary<string, QAItem>();
                     using (OcrApi translator = OcrApi.Create())
                     {
-                        translator.Init(Languages.Ukrainian);
+                        translator.Init(Languages.English);
 
                         foreach (string qPath in qPaths)
                         {
