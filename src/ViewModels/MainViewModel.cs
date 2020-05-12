@@ -35,7 +35,7 @@ namespace QAHelper.ViewModels
             SettingsCommand = new DelegateCommand(SettingsAction);
         }
 
-        public int QuestionsNumber => QAItems.Count;
+        public int QuestionsNumber => QAItemsFiltered.Count;
 
         public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
         {
@@ -111,6 +111,7 @@ namespace QAHelper.ViewModels
                 _questionSearchWordsString = value;
                 RaisePropertyChanged(nameof(QuestionSearchWordsString));
                 RaisePropertyChanged(nameof(QAItemsFiltered));
+                RaisePropertyChanged(nameof(QuestionsNumber));
             }
         }
 
