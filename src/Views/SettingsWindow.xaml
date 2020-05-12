@@ -8,7 +8,7 @@
         xmlns:Enums="clr-namespace:QAHelper.Enums"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Settings" Height="150" Width="400">
+        Title="Settings" Height="200" Width="400">
 
     <Window.Icon>
         <BitmapImage UriSource="pack://application:,,,/QAHelper;component/Images/question.png"/>
@@ -16,6 +16,7 @@
     
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -28,6 +29,13 @@
         <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="DisplayName" ItemsSource="{WPF:EnumToItemsSource {x:Type Enums:RecognitionLanguage}}" SelectedValue="{Binding SelectedRecognitionLanguage}" SelectedValuePath="Value" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Punctuation:" ToolTip="Punctuation strings separated by spacebar." VerticalAlignment="Center" Margin="10"/>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Punctuation, Mode=TwoWay, Delay=10}" Height="25" Margin="10"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Search key words in:" ToolTip="Uses in searching by key words." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" DisplayMemberPath="DisplayName" ItemsSource="{WPF:EnumToItemsSource {x:Type Enums:KeyWordsSearchType}}" SelectedValue="{Binding KeyWordsSearchType}" SelectedValuePath="Value" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10"/>
+        
+        <!-- TODO: DarkTheme, ProgramLanguage. -->
+
+        <!-- This need to enable close window by Escape. -->
+        <Button IsCancel="True" Width="0" Height="0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" BorderThickness="0"/>
     </Grid>
 
 </Window>

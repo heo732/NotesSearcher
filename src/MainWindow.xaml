@@ -42,13 +42,7 @@
                     <!--<MenuItem Header="TXT" Command="{Binding SaveQAItemsIntoTxtCommand}"/>-->
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Settings" Command="{Binding SettingsCommand}">
-                <!--<MenuItem Header="Program language" Command="{Binding ChangeProgramLanguageCommand}"/>
-                <MenuItem Header="Theme">
-                    <MenuItem Header="Light" Command="{Binding SetLightThemeCommand}"/>
-                    <MenuItem Header="Dark" Command="{Binding SetDarkThemeCommand}"/>
-                </MenuItem>-->
-            </MenuItem>
+            <MenuItem Header="Settings" Command="{Binding SettingsCommand}"/>
             <MenuItem Header="About" Command="{Binding AboutCommand}"/>
         </Menu>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding QuestionsNumber, Mode=OneWay, StringFormat={}Questions ({0})}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
@@ -120,10 +114,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Margin="10" Text="Search words:">
+            <TextBlock Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Margin="10" Text="Key words:">
                 <TextBlock.ToolTip>
-                    Look up for question with specified words, 
-                    in specified order and separated with spacebar or punctuation.
+                    Look up for questions or/and answers (according to Settings) with specified words, 
+                    in specified order, separated with spacebar and punctuation specified in Settings.
                 </TextBlock.ToolTip>
             </TextBlock>
             <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="10" Text="{Binding QuestionSearchWordsString, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>

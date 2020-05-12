@@ -39,5 +39,15 @@ namespace QAHelper.ViewModels
                 RaisePropertyChanged(nameof(Punctuation));
             }
         }
+
+        public KeyWordsSearchType KeyWordsSearchType
+        {
+            get => _model.KeyWordsSearchType;
+            set
+            {
+                _model.KeyWordsSearchType = value;
+                RaisePropertyChanged(nameof(KeyWordsSearchType));
+            }
+        }
     }
 }

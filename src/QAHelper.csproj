@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Enums\KeyWordsSearchType.cs" />
     <Compile Include="Enums\RecognitionLanguage.cs" />
     <Compile Include="Models\QAItem.cs" />
     <Compile Include="Models\SettingsModel.cs" />

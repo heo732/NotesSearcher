@@ -56,6 +56,7 @@ namespace QAHelper.ViewModels
                     continue;
                 }
 
+                // Search in Questions.
                 string qStr = item.Question;
                 foreach (string s in _settingsModel.Punctuation)
                 {
@@ -81,9 +82,65 @@ namespace QAHelper.ViewModels
                     }
                 }
 
+                bool passQuestion = false;
                 if (!searchWords.Any())
                 {
-                    filteredItems.Add(item);
+                    passQuestion = true;
+                }
+
+                // Search in Answers.
+                searchWords = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+                string aStr = string.Join(" ", item.Answers);
+                foreach (string s in _settingsModel.Punctuation)
+                {
+                    aStr = aStr.Replace(s, " ");
+                }
+                List<string> answerWords = aStr
+                    .Split(' ')
+                    .Where(i => !string.IsNullOrWhiteSpace(i))
+                    .ToList();
+
+                while (searchWords.Any() && answerWords.Any())
+                {
+                    string sw = searchWords.First();
+                    int index = answerWords.IndexOf(answerWords.Where(aw => aw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
+                    if (index >= 0)
+                    {
+                        answerWords = new List<string>(answerWords.Skip(index + 1));
+                        searchWords = searchWords.Skip(1);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                bool passAnswer = false;
+                if (!searchWords.Any())
+                {
+                    passAnswer = true;
+                }
+
+                switch (_settingsModel.KeyWordsSearchType)
+                {
+                    case Enums.KeyWordsSearchType.Questions:
+                        if (passQuestion)
+                        {
+                            filteredItems.Add(item);
+                        }
+                        break;
+                    case Enums.KeyWordsSearchType.Answers:
+                        if (passAnswer)
+                        {
+                            filteredItems.Add(item);
+                        }
+                        break;
+                    case Enums.KeyWordsSearchType.Both:
+                        if (passQuestion || passAnswer)
+                        {
+                            filteredItems.Add(item);
+                        }
+                        break;
                 }
             }
 
