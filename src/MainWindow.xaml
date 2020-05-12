@@ -30,7 +30,7 @@
                 <MenuItem Header="Load QA items from images" Command="{Binding LoadQAItemsFromImagesCommand}"/>
                 <MenuItem Header="Append QA items from JSON" Command="{Binding AppendQAItemsFromJsonCommand}"/>
                 <MenuItem Header="Append QA items from images" Command="{Binding AppendQAItemsFromImagesCommand}"/>
-                <MenuItem Header="Save QA items into JSON" Command="{Binding LoadQAItemsFromImagesCommand}"/>
+                <MenuItem Header="Save QA items into JSON" Command="{Binding SaveQAItemsIntoJsonCommand}"/>
             </MenuItem>
             <MenuItem Header="About" Command="{Binding AboutCommand}"/>
         </Menu>
