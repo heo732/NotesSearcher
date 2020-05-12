@@ -142,8 +142,12 @@ namespace QAHelper.ViewModels
                 .Select(i => new QAItem
                 {
                     Question = i.Key,
-                    Answers = i.SelectMany(a => a).Distinct().ToList()
-                }));
+                    Answers = i.SelectMany(a => a)
+                        .Distinct()
+                        .Where(a => !string.IsNullOrWhiteSpace(a))
+                        .ToList()
+                })
+                .Where(i => !string.IsNullOrWhiteSpace(i.Question)));
         }
 
         private void LoadQAItemsFromJsonFile(string filePath, bool append)
