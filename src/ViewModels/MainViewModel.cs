@@ -69,7 +69,7 @@ namespace QAHelper.ViewModels
                 while (searchWords.Any() && questionWords.Any())
                 {
                     string sw = searchWords.First();
-                    int index = questionWords.IndexOf(questionWords.FirstOrDefault(qw => StringComparer.InvariantCultureIgnoreCase.Equals(qw, sw)));
+                    int index = questionWords.IndexOf(questionWords.Where(qw => qw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
                     if (index >= 0)
                     {
                         questionWords = new List<string>(questionWords.Skip(index + 1));
