@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 using Newtonsoft.Json;
@@ -19,9 +20,11 @@ namespace QAHelper.ViewModels
 
         public MainViewModel()
         {
-            LoadQAItemsFromJsonFile("Sample.json");
+            LoadQAItemsFromJsonFile("Sample.json", false);
             AboutCommand = new DelegateCommand(AboutAction);
             SaveQAItemsIntoJsonCommand = new DelegateCommand(SaveQAItemsIntoJsonAction);
+            LoadQAItemsFromJsonCommand = new DelegateCommand(() => LoadOrAppendQAItemsFromJson(false));
+            AppendQAItemsFromJsonCommand = new DelegateCommand(() => LoadOrAppendQAItemsFromJson(true));
         }
 
         public int QuestionsNumber => QAItems.Count;
@@ -41,6 +44,10 @@ namespace QAHelper.ViewModels
 
         public DelegateCommand SaveQAItemsIntoJsonCommand { get; }
 
+        public DelegateCommand LoadQAItemsFromJsonCommand { get; }
+
+        public DelegateCommand AppendQAItemsFromJsonCommand { get; }
+
         private void TryCatchWrapperMethod(Action action)
         {
             try
@@ -53,11 +60,23 @@ namespace QAHelper.ViewModels
             }
         }
 
-        private void LoadQAItemsFromJsonFile(string filePath)
+        private void GroupAndAssignQAItems(IEnumerable<QAItem> items, bool append)
+        {
+            QAItems = new ObservableCollection<QAItem>(items
+                .Concat(append ? QAItems : new ObservableCollection<QAItem>())
+                .GroupBy(i => i.Question, i => i.Answers)
+                .Select(i => new QAItem
+                {
+                    Question = i.Key,
+                    Answers = i.SelectMany(a => a).Distinct().ToArray()
+                }));
+        }
+
+        private void LoadQAItemsFromJsonFile(string filePath, bool append)
         {
             TryCatchWrapperMethod(() =>
             {
-                QAItems = new ObservableCollection<QAItem>(JsonConvert.DeserializeObject<IEnumerable<QAItem>>(File.ReadAllText(filePath)));
+                GroupAndAssignQAItems(JsonConvert.DeserializeObject<IEnumerable<QAItem>>(File.ReadAllText(filePath)), append);
             });
         }
 
@@ -79,6 +98,22 @@ namespace QAHelper.ViewModels
                 if (dialog.ShowDialog() ?? false)
                 {
                     File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(QAItems, Formatting.Indented));
+                }
+            });
+        }
+
+        private void LoadOrAppendQAItemsFromJson(bool append)
+        {
+            TryCatchWrapperMethod(() =>
+            {
+                var dialog = new OpenFileDialog()
+                {
+                    Filter = "JSON files (*.json)|*.json"
+                };
+
+                if (dialog.ShowDialog() ?? false)
+                {
+                    LoadQAItemsFromJsonFile(dialog.FileName, append);
                 }
             });
         }
