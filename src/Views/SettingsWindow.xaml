@@ -8,7 +8,7 @@
         xmlns:Enums="clr-namespace:QAHelper.Enums"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Settings" Height="100" Width="200">
+        Title="Settings" Height="150" Width="400">
 
     <Window.Icon>
         <BitmapImage UriSource="pack://application:,,,/QAHelper;component/Images/question.png"/>
@@ -16,12 +16,18 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Image recognition language" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="1" DisplayMemberPath="DisplayName" ItemsSource="{WPF:EnumToItemsSource {x:Type Enums:RecognitionLanguage}}" SelectedValue="{Binding SelectedRecognitionLanguage}" SelectedValuePath="Value" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Image recognition language:" ToolTip="Uses on loading from images." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+        <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="DisplayName" ItemsSource="{WPF:EnumToItemsSource {x:Type Enums:RecognitionLanguage}}" SelectedValue="{Binding SelectedRecognitionLanguage}" SelectedValuePath="Value" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Punctuation:" ToolTip="Punctuation strings separated by spacebar." VerticalAlignment="Center" Margin="10"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Punctuation, Mode=TwoWay, Delay=10}" Height="25" Margin="10"/>
     </Grid>
 
 </Window>

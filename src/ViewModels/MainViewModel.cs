@@ -40,12 +40,11 @@ namespace QAHelper.ViewModels
         public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
         {
             List<QAItem> filteredItems = new List<QAItem>();
-            var punctuation = new string[] { ".", ",", "!", "?", ":", ";", "-", "(", ")" };
 
             foreach (QAItem item in QAItems)
             {
                 string searchWordsStr = QuestionSearchWordsString;
-                foreach (string s in punctuation)
+                foreach (string s in _settingsModel.Punctuation)
                 {
                     searchWordsStr = searchWordsStr.Replace(s, " ");
                 }
@@ -58,7 +57,7 @@ namespace QAHelper.ViewModels
                 }
 
                 string qStr = item.Question;
-                foreach (string s in punctuation)
+                foreach (string s in _settingsModel.Punctuation)
                 {
                     qStr = qStr.Replace(s, " ");
                 }
@@ -291,6 +290,7 @@ namespace QAHelper.ViewModels
         private void SettingsAction()
         {
             new SettingsWindow(new SettingsViewModel(_settingsModel)).ShowDialog();
+            RaisePropertyChanged(nameof(QAItemsFiltered));
         }
     }
 }
