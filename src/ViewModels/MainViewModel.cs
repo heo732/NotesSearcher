@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 
 using Newtonsoft.Json;
 
@@ -37,7 +38,7 @@ namespace QAHelper.ViewModels
 
         public int QuestionsNumber => QAItemsFiltered.Count;
 
-        public string HighlightWords
+        private List<string> SearchWordParts
         {
             get
             {
@@ -45,131 +46,76 @@ namespace QAHelper.ViewModels
 
                 if (string.IsNullOrEmpty(searchWordsStr))
                 {
-                    return searchWordsStr;
+                    return new List<string>();
                 }
 
                 foreach (string s in _settingsModel.Punctuation)
                 {
                     searchWordsStr = searchWordsStr.Replace(s, " ");
                 }
-                return string.Join(" ", searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i)));
+                return searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
             }
         }
 
-        public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
+        public List<QuestionViewModel> QAItemsFiltered => TryCatchWrapperMethod(() =>
         {
-            List<QAItem> filteredItems = new List<QAItem>();
+            List<QuestionViewModel> filteredItems = new List<QuestionViewModel>();
 
-            IEnumerable<string> searchWords_origin = HighlightWords.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+            IList<string> searchWordParts_origin = SearchWordParts;
 
-            if (!searchWords_origin.Any())
+            if (!searchWordParts_origin.Any())
             {
-                return QAItems.ToList();
+                return QAItems.Select(i => new QuestionViewModel(new List<Run> { new Run(i.Question) }, i.Answers.Select(a => new AnswerViewModel(new List<Run> { new Run(a) })).ToList())).ToList();
             }
 
             foreach (QAItem item in QAItems)
             {
-                // Search in Questions.
                 bool passQuestion = false;
+                bool passAnyAnswer = false;
+                var qestionParts = new List<Run> { new Run(item.Question) };
+                List<List<Run>> answersParts = item.Answers.Select(a => new List<Run> { new Run(a) }).ToList();
 
+                // Search in Questions.
                 if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Questions || _settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both)
                 {
-                    string qStr = item.Question;
-                    foreach (string s in _settingsModel.Punctuation)
-                    {
-                        qStr = qStr.Replace(s, " ");
-                    }
-                    List<string> questionWords = qStr
-                        .Split(' ')
-                        .Where(i => !string.IsNullOrWhiteSpace(i))
-                        .ToList();
-
-                    IEnumerable<string> searchWords = searchWords_origin;
-
-                    while (searchWords.Any() && questionWords.Any())
-                    {
-                        string sw = searchWords.First();
-                        int index = questionWords.IndexOf(questionWords.Where(qw => qw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
-                        if (index >= 0)
-                        {
-                            questionWords = new List<string>(questionWords.Skip(index + 1));
-                            searchWords = searchWords.Skip(1);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (!searchWords.Any())
-                    {
-                        passQuestion = true;
-                    }
+                    passQuestion = SearchWordPartsInText(item.Question, searchWordParts_origin, out List<Run> qTextParts);
+                    qestionParts = qTextParts;
                 }
 
                 // Search in Answers.
-                bool passAnswer = false;
-
                 if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Answers || (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both && !passQuestion))
                 {
-                    string aStr = string.Join(" ", item.Answers);
-                    foreach (string s in _settingsModel.Punctuation)
+                    for (int i = 0; i < item.Answers.Count; i++)
                     {
-                        aStr = aStr.Replace(s, " ");
-                    }
-                    List<string> answerWords = aStr
-                        .Split(' ')
-                        .Where(i => !string.IsNullOrWhiteSpace(i))
-                        .ToList();
-
-                    IEnumerable<string> searchWords = searchWords_origin;
-
-                    while (searchWords.Any() && answerWords.Any())
-                    {
-                        string sw = searchWords.First();
-                        int index = answerWords.IndexOf(answerWords.Where(aw => aw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
-                        if (index >= 0)
+                        if (SearchWordPartsInText(item.Answers[i], searchWordParts_origin, out List<Run> answerParts))
                         {
-                            answerWords = new List<string>(answerWords.Skip(index + 1));
-                            searchWords = searchWords.Skip(1);
+                            passAnyAnswer = true;
+                            answersParts[i] = answerParts;
                         }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (!searchWords.Any())
-                    {
-                        passAnswer = true;
                     }
                 }
 
+                bool passed = false;
                 switch (_settingsModel.KeyWordsSearchType)
                 {
                     case Enums.KeyWordsSearchType.Questions:
-                        if (passQuestion)
-                        {
-                            filteredItems.Add(item);
-                        }
+                        passed = passQuestion;
                         break;
                     case Enums.KeyWordsSearchType.Answers:
-                        if (passAnswer)
-                        {
-                            filteredItems.Add(item);
-                        }
+                        passed = passAnyAnswer;
                         break;
                     case Enums.KeyWordsSearchType.Both:
-                        if (passQuestion || passAnswer)
-                        {
-                            filteredItems.Add(item);
-                        }
+                        passed = passQuestion || passAnyAnswer;
                         break;
+                }
+                if (passed)
+                {
+                    filteredItems.Add(new QuestionViewModel(qestionParts, answersParts.Select(a => new AnswerViewModel(a))));
                 }
             }
 
             return filteredItems;
-        }, new List<QAItem>());
+        }, new List<QuestionViewModel>());
 
         public ObservableCollection<QAItem> QAItems
         {
@@ -190,7 +136,6 @@ namespace QAHelper.ViewModels
             {
                 _questionSearchWordsString = value;
                 RaisePropertyChanged(nameof(QuestionSearchWordsString));
-                RaisePropertyChanged(nameof(HighlightWords));
                 RaisePropertyChanged(nameof(QAItemsFiltered));
                 RaisePropertyChanged(nameof(QuestionsNumber));
             }
@@ -373,6 +318,44 @@ namespace QAHelper.ViewModels
         {
             new SettingsWindow(new SettingsViewModel(_settingsModel)).ShowDialog();
             RaisePropertyChanged(nameof(QAItemsFiltered));
+        }
+
+        private bool SearchWordPartsInText(string text, IList<string> origin_wordParts_toSearch, out List<Run> highlightableTextParts)
+        {
+            highlightableTextParts = new List<Run> { new Run(text) };
+
+            foreach (string s in _settingsModel.Punctuation)
+            {
+                text = text.Replace(s, " ");
+            }
+            List<string> textWords = text
+                .Split(' ')
+                .Where(i => !string.IsNullOrWhiteSpace(i))
+                .ToList();
+
+            IEnumerable<string> searchParts = origin_wordParts_toSearch;
+
+            while (searchParts.Any() && textWords.Any())
+            {
+                string sw = searchParts.First();
+                int index = textWords.IndexOf(textWords.Where(tw => tw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
+                if (index >= 0)
+                {
+                    textWords = new List<string>(textWords.Skip(index + 1));
+                    searchParts = searchParts.Skip(1);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (!searchParts.Any())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

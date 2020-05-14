@@ -90,7 +90,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <WPF:HighlightableTextBlock Grid.Column="0" HighlightableText="{Binding Question, Mode=OneWay}" HighlightedWords="{Binding DataContext.HighlightWords, Mode=OneWay, ElementName=qaItemsList}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <WPF:HighlightableTextBlock Grid.Column="0" HighlightableTextParts="{Binding HighlightableTextParts, Mode=OneWay}" TextWrapping="Wrap" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <ListView Grid.Column="1" ItemsSource="{Binding Answers, Mode=OneWay}" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" AlternationCount="2" ItemContainerStyle="{StaticResource AlternatingListViewItemStyle_2}" Margin="10" Background="Transparent" BorderThickness="0">
                                 <ListView.Template>
                                     <ControlTemplate>
@@ -100,7 +100,7 @@
 
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <WPF:HighlightableTextBlock VerticalAlignment="Center" HighlightableText="{Binding Mode=OneWay}" HighlightedWords="{Binding DataContext.HighlightWords, Mode=OneWay, ElementName=qaItemsList}" TextWrapping="Wrap"/>
+                                        <WPF:HighlightableTextBlock VerticalAlignment="Center" HighlightableTextParts="{Binding HighlightableTextParts, Mode=OneWay}" TextWrapping="Wrap"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
