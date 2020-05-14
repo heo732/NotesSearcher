@@ -6,7 +6,7 @@ namespace QAHelper.Models
     {
         public RecognitionLanguage ImageRecognitionLanguage { get; set; } = RecognitionLanguage.EN;
 
-        public string[] Punctuation { get; set; } = new string[] { ".", ",", "!", "?", ":", ";", "-", "(", ")" };
+        public char[] Punctuation { get; set; } = new char[] { '.', ',', '!', '?', ':', ';', '-', '(', ')' };
 
         public KeyWordsSearchType KeyWordsSearchType { get; set; } = KeyWordsSearchType.Questions;
     }

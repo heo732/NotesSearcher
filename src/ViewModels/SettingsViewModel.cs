@@ -34,6 +34,7 @@ namespace QAHelper.ViewModels
                     .Split(' ')
                     .Where(p => !string.IsNullOrWhiteSpace(p))
                     .Distinct()
+                    .SelectMany(s => s.ToCharArray())
                     .ToArray();
 
                 RaisePropertyChanged(nameof(Punctuation));

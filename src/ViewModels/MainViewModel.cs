@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -49,9 +50,9 @@ namespace QAHelper.ViewModels
                     return new List<string>();
                 }
 
-                foreach (string s in _settingsModel.Punctuation)
+                foreach (char p in _settingsModel.Punctuation)
                 {
-                    searchWordsStr = searchWordsStr.Replace(s, " ");
+                    searchWordsStr = searchWordsStr.Replace(p, ' ');
                 }
                 return searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
             }
@@ -78,8 +79,11 @@ namespace QAHelper.ViewModels
                 // Search in Questions.
                 if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Questions || _settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both)
                 {
-                    passQuestion = SearchWordPartsInText(item.Question, searchWordParts_origin, out List<Run> qTextParts);
-                    qestionParts = qTextParts;
+                    if (SearchWordPartsInText(item.Question, searchWordParts_origin, out List<Run> qTextParts))
+                    {
+                        qestionParts = qTextParts;
+                        passQuestion = true;
+                    }
                 }
 
                 // Search in Answers.
@@ -322,35 +326,82 @@ namespace QAHelper.ViewModels
 
         private bool SearchWordPartsInText(string text, IList<string> origin_wordParts_toSearch, out List<Run> highlightableTextParts)
         {
-            highlightableTextParts = new List<Run> { new Run(text) };
+            highlightableTextParts = new List<Run>();
+            char[] punctuation = _settingsModel.Punctuation.Concat(new char[] { ' ' }).ToArray();
+            var currentText = new StringBuilder(text);
+            IEnumerable<string> notFoundParts = origin_wordParts_toSearch;
+            var currentTextPart = new StringBuilder();
 
-            foreach (string s in _settingsModel.Punctuation)
+            while (currentText.Length > 0 && notFoundParts.Any())
             {
-                text = text.Replace(s, " ");
-            }
-            List<string> textWords = text
-                .Split(' ')
-                .Where(i => !string.IsNullOrWhiteSpace(i))
-                .ToList();
+                char f = currentText[0];
 
-            IEnumerable<string> searchParts = origin_wordParts_toSearch;
-
-            while (searchParts.Any() && textWords.Any())
-            {
-                string sw = searchParts.First();
-                int index = textWords.IndexOf(textWords.Where(tw => tw.IndexOf(sw, StringComparison.InvariantCultureIgnoreCase) >= 0).FirstOrDefault());
-                if (index >= 0)
+                if (punctuation.Any(p => p == f))
                 {
-                    textWords = new List<string>(textWords.Skip(index + 1));
-                    searchParts = searchParts.Skip(1);
+                    currentTextPart.Append(f);
+                    currentText.Remove(0, 1);
+                    continue;
                 }
                 else
                 {
-                    break;
+                    if (currentTextPart.Length > 0)
+                    {
+                        highlightableTextParts.Add(new Run(currentTextPart.ToString()));
+                        currentTextPart.Clear();
+                    }
+
+                    int indexOfNextPunctuation = currentText.ToString().IndexOfAny(punctuation);
+                    indexOfNextPunctuation = indexOfNextPunctuation >= 0 ? indexOfNextPunctuation : currentText.Length;
+
+                    string currentWord = currentText.ToString().Substring(0, indexOfNextPunctuation);
+                    string currentSearchPart = notFoundParts.First();
+
+                    int indexOfMatchStart = currentWord.IndexOf(currentSearchPart, StringComparison.InvariantCultureIgnoreCase);
+                    if (indexOfMatchStart >= 0)
+                    {
+                        notFoundParts = notFoundParts.Skip(1);
+                        currentText.Remove(0, indexOfNextPunctuation);
+                        currentTextPart.Clear();
+
+                        string left = currentWord.Substring(0, indexOfMatchStart);
+                        string mid = currentWord.Substring(indexOfMatchStart, currentSearchPart.Length);
+                        string right = currentWord.Substring(indexOfMatchStart + currentSearchPart.Length);
+
+                        if (!string.IsNullOrEmpty(left))
+                        {
+                            highlightableTextParts.Add(new Run(left));
+                        }
+
+                        if (!string.IsNullOrEmpty(mid))
+                        {
+                            highlightableTextParts.Add(new Run(mid) { FontWeight = FontWeights.Bold });
+                        }
+
+                        if (!string.IsNullOrEmpty(right))
+                        {
+                            highlightableTextParts.Add(new Run(right));
+                        }
+                    }
+                    else
+                    {
+                        currentText.Remove(0, indexOfNextPunctuation);
+                        currentTextPart.Clear();
+                        highlightableTextParts.Add(new Run(currentWord));
+                    }
                 }
             }
 
-            if (!searchParts.Any())
+            if (currentTextPart.Length > 0)
+            {
+                highlightableTextParts.Add(new Run(currentTextPart.ToString()));
+            }
+
+            if (currentText.Length > 0)
+            {
+                highlightableTextParts.Add(new Run(currentText.ToString()));
+            }
+
+            if (!notFoundParts.Any())
             {
                 return true;
             }
