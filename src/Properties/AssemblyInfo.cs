@@ -8,13 +8,14 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QAHelper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Helper to search for some questions and answers")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("QAHelper")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: Guid("5DE2FDC4-BAFF-4B27-A738-B65990BD16FB")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -51,5 +52,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.3.8")]
-[assembly: AssemblyFileVersion("0.3.8")]
+[assembly: AssemblyVersion("0.3.9")]
+[assembly: AssemblyFileVersion("0.3.9")]
