@@ -90,6 +90,9 @@
     <Compile Include="WPF\BindableBase.cs" />
     <Compile Include="WPF\DelegateCommand.cs" />
     <Compile Include="WPF\EnumToItemsSourceExtension.cs" />
+    <Compile Include="WPF\HighlightableTextBlock.cs" />
+    <Compile Include="WPF\SelectableTextBlock.cs" />
+    <Compile Include="WPF\TextEditorWrapper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

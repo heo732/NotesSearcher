@@ -37,17 +37,30 @@ namespace QAHelper.ViewModels
 
         public int QuestionsNumber => QAItemsFiltered.Count;
 
+        public string HighlightWords
+        {
+            get
+            {
+                string searchWordsStr = QuestionSearchWordsString;
+
+                if (string.IsNullOrEmpty(searchWordsStr))
+                {
+                    return searchWordsStr;
+                }
+
+                foreach (string s in _settingsModel.Punctuation)
+                {
+                    searchWordsStr = searchWordsStr.Replace(s, " ");
+                }
+                return string.Join(" ", searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i)));
+            }
+        }
+
         public List<QAItem> QAItemsFiltered => TryCatchWrapperMethod(() =>
         {
             List<QAItem> filteredItems = new List<QAItem>();
 
-            // Prepare search words.
-            string searchWordsStr = QuestionSearchWordsString;
-            foreach (string s in _settingsModel.Punctuation)
-            {
-                searchWordsStr = searchWordsStr.Replace(s, " ");
-            }
-            IEnumerable<string> searchWords_origin = searchWordsStr.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
+            IEnumerable<string> searchWords_origin = HighlightWords.Split(' ').Where(i => !string.IsNullOrWhiteSpace(i));
 
             if (!searchWords_origin.Any())
             {
@@ -177,6 +190,7 @@ namespace QAHelper.ViewModels
             {
                 _questionSearchWordsString = value;
                 RaisePropertyChanged(nameof(QuestionSearchWordsString));
+                RaisePropertyChanged(nameof(HighlightWords));
                 RaisePropertyChanged(nameof(QAItemsFiltered));
                 RaisePropertyChanged(nameof(QuestionsNumber));
             }
