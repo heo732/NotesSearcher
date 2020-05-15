@@ -25,6 +25,7 @@ namespace QAHelper.ViewModels
         private ObservableCollection<QAItem> _qaItems = new ObservableCollection<QAItem>();
         private string _questionSearchWordsString = string.Empty;
         private readonly SettingsModel _settingsModel = new SettingsModel();
+        private readonly Brush _highlightBrush = new SolidColorBrush(Color.FromArgb(250, 255, 248, 56));
 
         public MainViewModel()
         {
@@ -78,7 +79,7 @@ namespace QAHelper.ViewModels
                 List<List<Run>> answersParts = item.Answers.Select(a => new List<Run> { new Run(a) }).ToList();
 
                 // Search in Questions.
-                if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Questions || _settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both)
+                if (_settingsModel.KeyWordsSearchType != Enums.KeyWordsSearchType.Answers)
                 {
                     if (SearchWordPartsInText(item.Question, searchWordParts_origin, out List<Run> qTextParts))
                     {
@@ -88,7 +89,7 @@ namespace QAHelper.ViewModels
                 }
 
                 // Search in Answers.
-                if (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Answers || (_settingsModel.KeyWordsSearchType == Enums.KeyWordsSearchType.Both && !passQuestion))
+                if (_settingsModel.KeyWordsSearchType != Enums.KeyWordsSearchType.Questions)
                 {
                     for (int i = 0; i < item.Answers.Count; i++)
                     {
@@ -377,7 +378,7 @@ namespace QAHelper.ViewModels
                         {
                             highlightableTextParts.Add(new Run(mid)
                             {
-                                Background = new SolidColorBrush(Color.FromArgb(250, 255, 248, 56)),
+                                Background = _highlightBrush,
                                 FontWeight = FontWeights.Bold
                             });
                         }
@@ -408,6 +409,37 @@ namespace QAHelper.ViewModels
 
             if (!notFoundParts.Any())
             {
+                if (highlightableTextParts.Any())
+                {
+                    var part = new StringBuilder();
+                    var newParts = new List<Run>();
+                    string currentBackground = highlightableTextParts[0].Background?.ToString() ?? string.Empty;
+                    FontWeight currentFontWeight = highlightableTextParts[0].FontWeight;
+
+                    foreach (Run p in highlightableTextParts)
+                    {
+                        if ((p.Background?.ToString() ?? string.Empty) == currentBackground)
+                        {
+                            part.Append(p.Text);
+                        }
+                        else
+                        {
+                            newParts.Add(new Run(part.ToString()) { FontWeight = currentFontWeight, Background = _highlightBrush.ToString() == currentBackground ? _highlightBrush : Brushes.Transparent });
+                            part.Clear();
+                            part.Append(p.Text);
+                            currentBackground = p.Background?.ToString() ?? string.Empty;
+                            currentFontWeight = p.FontWeight;
+                        }
+                    }
+
+                    if (part.Length > 0)
+                    {
+                        newParts.Add(new Run(part.ToString()) { FontWeight = currentFontWeight, Background = _highlightBrush.ToString() == currentBackground ? _highlightBrush : Brushes.Transparent });
+                    }
+
+                    highlightableTextParts = newParts;
+                }
+
                 return true;
             }
 
