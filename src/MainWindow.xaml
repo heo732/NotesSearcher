@@ -53,7 +53,7 @@
                 <Style x:Key="AlternatingListViewItemStyle_1" TargetType="{x:Type ListViewItem}">
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="LightGray"/>
+                            <Setter Property="Background" Value="#77dee0e0"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="White"/>
@@ -66,10 +66,10 @@
                     <Setter Property="BorderThickness" Value="0"/>
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="LightGoldenrodYellow"/>
+                            <Setter Property="Background" Value="#20ffbada"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="LightSeaGreen"/>
+                            <Setter Property="Background" Value="#20abf5bf"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -121,7 +121,7 @@
                     in specified order, separated with spacebar and punctuation specified in Settings.
                 </TextBlock.ToolTip>
             </TextBlock>
-            <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="10" Text="{Binding QuestionSearchWordsString, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" FontSize="18" Text="{Binding QuestionSearchWordsString, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Height="30"/>
         </Grid>
     </Grid>
     

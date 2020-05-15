@@ -8,6 +8,6 @@ namespace QAHelper.Models
 
         public char[] Punctuation { get; set; } = new char[] { '.', ',', '!', '?', ':', ';', '-', '(', ')' };
 
-        public KeyWordsSearchType KeyWordsSearchType { get; set; } = KeyWordsSearchType.Questions;
+        public KeyWordsSearchType KeyWordsSearchType { get; set; } = KeyWordsSearchType.Both;
     }
 }

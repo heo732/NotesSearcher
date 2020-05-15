@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 using Newtonsoft.Json;
 
@@ -374,7 +375,11 @@ namespace QAHelper.ViewModels
 
                         if (!string.IsNullOrEmpty(mid))
                         {
-                            highlightableTextParts.Add(new Run(mid) { FontWeight = FontWeights.Bold });
+                            highlightableTextParts.Add(new Run(mid)
+                            {
+                                Background = new SolidColorBrush(Color.FromArgb(250, 255, 248, 56)),
+                                FontWeight = FontWeights.Bold
+                            });
                         }
 
                         if (!string.IsNullOrEmpty(right))
