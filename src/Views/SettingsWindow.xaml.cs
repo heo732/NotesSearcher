@@ -1,21 +1,18 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Interop;
+using NotesSearcher.ViewModels;
 
-using QAHelper.ViewModels;
-
-namespace QAHelper.Views
+namespace NotesSearcher.Views;
+public partial class SettingsWindow : Window
 {
-    public partial class SettingsWindow : Window
+    public SettingsWindow(SettingsViewModel viewModel)
     {
-        public SettingsWindow(SettingsViewModel viewModel)
+        var windowInteropHelper = new WindowInteropHelper(this)
         {
-            var windowInteropHelper = new WindowInteropHelper(this)
-            {
-                Owner = Process.GetCurrentProcess().MainWindowHandle
-            };
-            InitializeComponent();
-            DataContext = viewModel;
-        }
+            Owner = Process.GetCurrentProcess().MainWindowHandle
+        };
+        InitializeComponent();
+        DataContext = viewModel;
     }
 }

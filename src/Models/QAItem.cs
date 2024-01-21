@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace QAHelper.Models
+namespace NotesSearcher.Models;
+public class QAItem
 {
-    public class QAItem
-    {
-        public string Question { get; set; } = string.Empty;
+    public string Question { get; set; } = string.Empty;
 
-        public List<string> Answers { get; set; } = new List<string>();
-    }
+    public List<string> Answers { get; set; } = new List<string>();
 }

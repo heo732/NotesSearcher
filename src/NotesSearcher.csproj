@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <ApplicationIcon>Images\question.ico</ApplicationIcon>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="Tesseract.Net.SDK" Version="4.5.411" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Sample.json" CopyToOutputDirectory="Always" />
+    <Resource Include="Images\*" />
+  </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(SolutionDir)\ThirdParty\Tesseract\*&quot; &quot;$(TargetDir)&quot; /S /Y /R" />
+  </Target>
+
+</Project>

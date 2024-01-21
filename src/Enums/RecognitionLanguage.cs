@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel;
 
-namespace QAHelper.Enums
+namespace NotesSearcher.Enums;
+public enum RecognitionLanguage
 {
-    public enum RecognitionLanguage
-    {
-        [Description("English")]
-        EN,
-        [Description("Ukrainian")]
-        UA
-    }
+    [Description("English")]
+    EN,
+    [Description("Ukrainian")]
+    UA
 }

@@ -1,54 +1,52 @@
 ﻿using System.Linq;
 
-using QAHelper.Enums;
-using QAHelper.Models;
-using QAHelper.WPF;
+using NotesSearcher.Enums;
+using NotesSearcher.Models;
+using NotesSearcher.WPF;
 
-namespace QAHelper.ViewModels
+namespace NotesSearcher.ViewModels;
+public class SettingsViewModel : BindableBase
 {
-    public class SettingsViewModel : BindableBase
+    private readonly SettingsModel _model;
+
+    public SettingsViewModel(SettingsModel model)
     {
-        private readonly SettingsModel _model;
+        _model = model;
+    }
 
-        public SettingsViewModel(SettingsModel model)
+    public RecognitionLanguage SelectedRecognitionLanguage
+    {
+        get => _model.ImageRecognitionLanguage;
+        set
         {
-            _model = model;
+            _model.ImageRecognitionLanguage = value;
+            RaisePropertyChanged(nameof(SelectedRecognitionLanguage));
         }
+    }
 
-        public RecognitionLanguage SelectedRecognitionLanguage
+    public string Punctuation
+    {
+        get => string.Join(" ", _model.Punctuation);
+        set
         {
-            get => _model.ImageRecognitionLanguage;
-            set
-            {
-                _model.ImageRecognitionLanguage = value;
-                RaisePropertyChanged(nameof(SelectedRecognitionLanguage));
-            }
+            _model.Punctuation = value
+                .Split(' ')
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .SelectMany(s => s.ToCharArray())
+                .ToArray();
+
+            RaisePropertyChanged(nameof(Punctuation));
         }
+    }
 
-        public string Punctuation
+    public KeyWordsSearchType KeyWordsSearchType
+    {
+        get => _model.KeyWordsSearchType;
+        set
         {
-            get => string.Join(" ", _model.Punctuation);
-            set
-            {
-                _model.Punctuation = value
-                    .Split(' ')
-                    .Where(p => !string.IsNullOrWhiteSpace(p))
-                    .Distinct()
-                    .SelectMany(s => s.ToCharArray())
-                    .ToArray();
-
-                RaisePropertyChanged(nameof(Punctuation));
-            }
-        }
-
-        public KeyWordsSearchType KeyWordsSearchType
-        {
-            get => _model.KeyWordsSearchType;
-            set
-            {
-                _model.KeyWordsSearchType = value;
-                RaisePropertyChanged(nameof(KeyWordsSearchType));
-            }
+            _model.KeyWordsSearchType = value;
+            RaisePropertyChanged(nameof(KeyWordsSearchType));
         }
     }
 }

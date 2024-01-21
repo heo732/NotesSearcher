@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Documents;
 
-namespace QAHelper.ViewModels
+namespace NotesSearcher.ViewModels;
+public abstract class HighlightableTextViewModel
 {
-    public abstract class HighlightableTextViewModel
+    public HighlightableTextViewModel(IList<Run> highlightableTextParts)
     {
-        public HighlightableTextViewModel(IList<Run> highlightableTextParts)
-        {
-            HighlightableTextParts = highlightableTextParts;
-        }
-
-        public IList<Run> HighlightableTextParts { get; }
+        HighlightableTextParts = highlightableTextParts;
     }
+
+    public IList<Run> HighlightableTextParts { get; }
 }

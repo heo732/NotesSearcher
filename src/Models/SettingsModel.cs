@@ -1,13 +1,11 @@
-﻿using QAHelper.Enums;
+﻿using NotesSearcher.Enums;
 
-namespace QAHelper.Models
+namespace NotesSearcher.Models;
+public class SettingsModel
 {
-    public class SettingsModel
-    {
-        public RecognitionLanguage ImageRecognitionLanguage { get; set; } = RecognitionLanguage.EN;
+    public RecognitionLanguage ImageRecognitionLanguage { get; set; } = RecognitionLanguage.EN;
 
-        public char[] Punctuation { get; set; } = new char[] { '.', ',', '!', '?', ':', ';', '-', '(', ')' };
+    public char[] Punctuation { get; set; } = new char[] { '.', ',', '!', '?', ':', ';', '-', '(', ')' };
 
-        public KeyWordsSearchType KeyWordsSearchType { get; set; } = KeyWordsSearchType.Both;
-    }
+    public KeyWordsSearchType KeyWordsSearchType { get; set; } = KeyWordsSearchType.Both;
 }

@@ -1,15 +1,12 @@
 ﻿using System.Windows;
+using NotesSearcher.ViewModels;
 
-using QAHelper.ViewModels;
-
-namespace QAHelper
+namespace NotesSearcher;
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            DataContext = new MainViewModel();
-        }
+        InitializeComponent();
+        DataContext = new MainViewModel();
     }
 }

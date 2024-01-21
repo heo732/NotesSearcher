@@ -3,41 +3,39 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Markup;
 
-namespace QAHelper.WPF
+namespace NotesSearcher.WPF;
+public class EnumToItemsSourceExtension : MarkupExtension
 {
-    public class EnumToItemsSourceExtension : MarkupExtension
+    private Type Type { get; }
+
+    public EnumToItemsSourceExtension(Type type)
     {
-        private Type Type { get; }
+        Type = type;
+    }
 
-        public EnumToItemsSourceExtension(Type type)
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        if ((Type != null) && Type.IsEnum)
         {
-            Type = type;
+            return Enum.GetValues(Type)
+                .OfType<object>()
+                .Select(e => new { Value = e, DisplayName = GetEnumValueDescription(e) });
         }
+        return new object[0];
+    }
 
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            if ((Type != null) && Type.IsEnum)
-            {
-                return Enum.GetValues(Type)
-                    .OfType<object>()
-                    .Select(e => new { Value = e, DisplayName = GetEnumValueDescription(e) });
-            }
-            return new object[0];
-        }
+    private string GetEnumValueDescription(object enumValue)
+    {
+        Type enumType = enumValue.GetType();
+        string enumFieldName = enumValue.ToString();
 
-        private string GetEnumValueDescription(object enumValue)
-        {
-            Type enumType = enumValue.GetType();
-            string enumFieldName = enumValue.ToString();
+        string description = enumType
+            .GetField(enumFieldName)
+            ?.GetCustomAttributes(typeof(DescriptionAttribute), false)
+            .OfType<DescriptionAttribute>()
+            .FirstOrDefault()
+            ?.Description;
 
-            string description = enumType
-                .GetField(enumFieldName)
-                ?.GetCustomAttributes(typeof(DescriptionAttribute), false)
-                .OfType<DescriptionAttribute>()
-                .FirstOrDefault()
-                ?.Description;
-
-            return string.IsNullOrWhiteSpace(description) ? enumFieldName : description;
-        }
+        return string.IsNullOrWhiteSpace(description) ? enumFieldName : description;
     }
 }
